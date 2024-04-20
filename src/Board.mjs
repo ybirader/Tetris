@@ -13,6 +13,10 @@ export class Board {
     this.grid = this._resetGrid();
   }
 
+  hasFalling() {
+    return this.currentBlock != undefined
+  }
+
   tick() {
     this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER
     this.currentCoordinate.row += 1
