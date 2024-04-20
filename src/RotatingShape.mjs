@@ -1,4 +1,4 @@
-import { normalize } from "../test/testing.mjs";
+import { normalize } from "./utils/utils.mjs"
 
 export class RotatingShape {
   static fromString(string) {
@@ -13,7 +13,6 @@ export class RotatingShape {
 
   _parse(string) {
     return string
-      .trim()
       .split("\n")
       .reduce((result, row) => {
         result.push(row.split(""));
@@ -22,6 +21,6 @@ export class RotatingShape {
   }
 
   toString() {
-    return this._shapeData.map((row) => `${row.join("")}\n`).reduce((result, rowString) => (result += rowString), "");
+    return this._shapeData.map((row) => `${row.join("")}\n`).join("");
   }
 }

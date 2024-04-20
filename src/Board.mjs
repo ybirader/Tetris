@@ -38,7 +38,7 @@ export class Board {
   }
 
   toString() {
-    return this.grid.map((row) => `${row.join("")}\n`).reduce((result, rowString) => (result += rowString), "");
+    return this.grid.map((row) => `${row.join("")}\n`).join("");
   }
 
   _resetGrid() {

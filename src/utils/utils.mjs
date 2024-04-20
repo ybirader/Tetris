@@ -1,3 +1,3 @@
-const normalize = (string) => {
-  return string.replaceAll(" ", "") + "\n";
+export const normalize = (string) => {
+  return string.replaceAll(" ", "");
 };
