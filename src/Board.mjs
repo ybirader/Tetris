@@ -20,9 +20,9 @@ export class Board {
 
   drop(block) {
     this.currentBlock = block
-    const midRow = Math.floor(this.width / 2)
-    this.currentCoordinate = { row: 0, col: midRow }
-    this.grid[0][midRow] = block
+    const initialCol = Math.floor(this.width / 2)
+    this.currentCoordinate = { row: 0, col: initialCol }
+    this.grid[0][initialCol] = block
   }
 
   toString() {
