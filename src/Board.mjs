@@ -2,6 +2,8 @@ export class Board {
   width;
   height;
   grid;
+  currentCoordinate;
+  currentBlock;
 
   SENTINEL_MARKER = ".";
 
@@ -11,8 +13,15 @@ export class Board {
     this.grid = this._resetGrid();
   }
 
+  tick() {
+    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER
+    this.grid[this.currentCoordinate.row + 1][this.currentCoordinate.col] = this.currentBlock
+  }
+
   drop(block) {
+    this.currentBlock = block
     const midRow = Math.floor(this.width / 2)
+    this.currentCoordinate = { row: 0, col: midRow }
     this.grid[0][midRow] = block
   }
 
