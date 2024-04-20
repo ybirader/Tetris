@@ -13,41 +13,39 @@ export class Board {
     this.grid = this._resetGrid();
   }
 
-  hasFalling() {
-    return this.currentBlock != undefined
-  }
-
   tick() {
-    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER
-    this.currentCoordinate.row += 1
-    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.currentBlock
+    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER;
+    this.currentCoordinate.row += 1;
+    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.currentBlock;
   }
 
   drop(block) {
-    if (this.currentBlock) {
-      throw new Error("already falling")
+    if (this.hasFalling()) {
+      throw new Error("already falling");
     }
 
-    this.currentBlock = block
-    const initialCol = Math.floor(this.width / 2)
-    this.currentCoordinate = { row: 0, col: initialCol }
-    this.grid[0][initialCol] = block
+    this.currentBlock = block;
+    const initialCol = Math.floor(this.width / 2);
+    this.currentCoordinate = { row: 0, col: initialCol };
+    this.grid[0][initialCol] = block;
+  }
+
+  hasFalling() {
+    return this.currentBlock != undefined;
   }
 
   toString() {
-    return this.grid
-    .map((row) => `${row.join("")}\n`)
-    .reduce((result, rowString) => (result += rowString), "");
+    return this.grid.map((row) => `${row.join("")}\n`).reduce((result, rowString) => (result += rowString), "");
   }
 
   _resetGrid() {
-    const result = []
+    const result = [];
 
     for (let i = 0; i < this.height; i++) {
-      const row = Array(this.width).fill(this.SENTINEL_MARKER)
-      result.push(row)
+      const row = Array(this.width).fill(this.SENTINEL_MARKER);
+      result.push(row);
     }
 
-    return result
+    return result;
   }
 }
