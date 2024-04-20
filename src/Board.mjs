@@ -18,7 +18,13 @@ export class Board {
   }
 
   _resetGrid() {
-    const row = Array(this.width).fill(this.SENTINEL_MARKER);
-    return Array(this.height).fill(row);
+    const result = []
+
+    for (let i = 0; i < this.height; i++) {
+      const row = Array(this.width).fill(this.SENTINEL_MARKER)
+      result.push(row)
+    }
+
+    return result
   }
 }
