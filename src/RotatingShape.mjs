@@ -22,8 +22,7 @@ export class RotatingShape {
   }
 
   rotateRight() {
-    const transposed = transpose(this._shapeData);
-    return new RotatingShape(transposed.map((row) => row.toReversed()));
+    return new RotatingShape(transpose(this._shapeData).map((row) => row.toReversed()));
   }
 
   rotateLeft() {
