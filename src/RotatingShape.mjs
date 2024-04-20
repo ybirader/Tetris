@@ -1,23 +1,29 @@
-import { normalize } from "./utils/utils.mjs"
+import { normalize, transpose } from "./utils/utils.mjs";
 
 export class RotatingShape {
   static fromString(string) {
-    return new RotatingShape(string);
+    return new RotatingShape(this._parse(normalize(string)));
   }
 
-  _shapeData;
-
-  constructor(string) {
-    this._shapeData = this._parse(normalize(string));
-  }
-
-  _parse(string) {
+  static _parse(string) {
     return string
+      .trim()
       .split("\n")
       .reduce((result, row) => {
         result.push(row.split(""));
         return result;
       }, []);
+  }
+
+  _shapeData;
+
+  constructor(shapeData) {
+    this._shapeData = shapeData;
+  }
+
+  rotateRight() {
+    const transposed = transpose(this._shapeData)
+    return new RotatingShape(transposed.map((row) => row.toReversed()));
   }
 
   toString() {
