@@ -14,6 +14,11 @@ export class Board {
   }
 
   tick() {
+    if (this._hasFallen()) {
+      this.currentBlock = undefined
+      return
+    }
+
     this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER;
     this.currentCoordinate.row += 1;
     this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.currentBlock;
@@ -47,5 +52,9 @@ export class Board {
     }
 
     return result;
+  }
+
+  _hasFallen() {
+    return this.currentCoordinate.row + 1 >= this.height
   }
 }
