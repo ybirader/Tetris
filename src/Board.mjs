@@ -11,6 +11,11 @@ export class Board {
     this.grid = this._resetGrid();
   }
 
+  drop(block) {
+    const midRow = Math.floor(this.width / 2)
+    this.grid[0][midRow] = block
+  }
+
   toString() {
     return this.grid
     .map((row) => `${row.join("")}\n`)
