@@ -15,8 +15,8 @@ export class Board {
 
   tick() {
     if (this._hasFallen()) {
-      this.currentBlock = undefined
-      return
+      this.currentBlock = undefined;
+      return;
     }
 
     this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER;
@@ -55,6 +55,9 @@ export class Board {
   }
 
   _hasFallen() {
-    return this.currentCoordinate.row + 1 >= this.height
+    return (
+      this.currentCoordinate.row + 1 >= this.height ||
+      this.grid[this.currentCoordinate.row + 1][this.currentCoordinate.col] != this.SENTINEL_MARKER
+    );
   }
 }
