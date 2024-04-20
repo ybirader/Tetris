@@ -15,10 +15,15 @@ export class Board {
 
   tick() {
     this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER
-    this.grid[this.currentCoordinate.row + 1][this.currentCoordinate.col] = this.currentBlock
+    this.currentCoordinate.row += 1
+    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.currentBlock
   }
 
   drop(block) {
+    if (this.currentBlock) {
+      throw new Error("already falling")
+    }
+
     this.currentBlock = block
     const initialCol = Math.floor(this.width / 2)
     this.currentCoordinate = { row: 0, col: initialCol }
