@@ -30,9 +30,7 @@ export class Board {
     }
 
     this.currentBlock = block;
-    const initialCol = Math.floor(this.width / 2);
-    this.currentCoordinate = { row: 0, col: initialCol };
-    this.grid[0][initialCol] = block;
+    this._initializeBlockPosition()
   }
 
   hasFalling() {
@@ -59,5 +57,11 @@ export class Board {
       this.currentCoordinate.row + 1 >= this.height ||
       this.grid[this.currentCoordinate.row + 1][this.currentCoordinate.col] != this.SENTINEL_MARKER
     );
+  }
+
+  _initializeBlockPosition() {
+    const initialCol = Math.floor(this.width / 2);
+    this.currentCoordinate = { row: 0, col: initialCol };
+    this.grid[0][initialCol] = this.currentBlock;
   }
 }
