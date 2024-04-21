@@ -10,6 +10,16 @@ export class Tetromino {
     ]);
   }
 
+  static get I_SHAPE() {
+    return new Tetromino([
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+      ["I", "I", "I", "I", "."],
+      [".", ".", ".", ".", "."],
+      [".", ".", ".", ".", "."],
+    ])
+  }
+
   rotatingShape;
 
   constructor(shape) {
