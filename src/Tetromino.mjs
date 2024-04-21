@@ -1,48 +1,70 @@
 import { RotatingShape } from "./RotatingShape.mjs";
 
 export class Tetromino {
-
   static get T_SHAPE() {
-    return new Tetromino([
-      [".", "T", "."],
-      ["T", "T", "T"],
-      [".", ".", "."],
-    ]);
+    return Tetromino.fromString(
+      `
+    .T.
+    TTT
+    ...
+    `,
+      4
+    );
   }
 
   static get I_SHAPE() {
-    return new Tetromino([
-      [".", ".", ".", ".", "."],
-      [".", ".", ".", ".", "."],
-      ["I", "I", "I", "I", "."],
-      [".", ".", ".", ".", "."],
-      [".", ".", ".", ".", "."],
-    ])
+    return Tetromino.fromString(
+      `
+    .....
+    .....
+    IIII.
+    .....
+    .....
+    `,
+      2
+    );
   }
 
   static get O_SHAPE() {
-    return new Tetromino([
-      [".", "O", "O"],
-      [".", "O", "O"],
-      [".", ".", "."],
-    ])
+    return Tetromino.fromString(
+      `
+    .OO
+    .OO
+    ...
+    `,
+      1
+    );
   }
 
-  rotatingShape;
+  static fromString(shapeString, numberOfOrientations) {
+    const rotatingShape = RotatingShape.fromString(shapeString);
+    const orientations = [
+      rotatingShape,
+      rotatingShape.rotateRight(),
+      rotatingShape.rotateRight().rotateRight(),
+      rotatingShape.rotateRight().rotateRight().rotateRight(),
+    ].slice(0, numberOfOrientations);
 
-  constructor(shape) {
-    this.rotatingShape = new RotatingShape(shape)
+    return new Tetromino(orientations, 0);
+  }
+
+  orientations;
+  currentOrientation;
+
+  constructor(orientations, currentOrientation) {
+    this.orientations = orientations;
+    this.currentOrientation = (currentOrientation + orientations.length) % orientations.length;
   }
 
   rotateRight() {
-    return this.rotatingShape.rotateRight()
+    return new Tetromino(this.orientations, this.currentOrientation + 1);
   }
 
   rotateLeft() {
-    return this.rotatingShape.rotateLeft()
+    return new Tetromino(this.orientations, this.currentOrientation - 1);
   }
 
   toString() {
-    return this.rotatingShape.toString()
+    return this.orientations[this.currentOrientation].toString();
   }
 }
