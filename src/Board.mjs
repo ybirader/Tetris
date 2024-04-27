@@ -73,9 +73,21 @@ export class Board {
   }
 
   _hasFallen() {
-    return (
-      this.currentCoordinate.row + 1 >= this.height ||
-      this.grid[this.currentCoordinate.row + 1][this.currentCoordinate.col] != this.SENTINEL_MARKER
-    );
+    if (!(this.fallingTetromino instanceof Tetromino)) {
+      return (
+        this.currentCoordinate.row + 1 >= this.height ||
+        this.grid[this.currentCoordinate.row + 1][this.currentCoordinate.col] != this.SENTINEL_MARKER
+      );
+    }
   }
 }
+
+
+/*
+
+
+- currentRow + 1 out of bounds || currentRow + tetromino width out of bounds
+
+
+
+*/
