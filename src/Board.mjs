@@ -106,6 +106,20 @@ export class Board {
       );
     }
 
-    return this.currentCoordinate.row + this.fallingTetromino.dimension > this.height;
+    return this.currentCoordinate.row + this.fallingTetromino.dimension > this.height || this.hasTetrominoBelow();
+  }
+
+  hasTetrominoBelow() {
+    let lastRow = this.currentCoordinate.row + this.fallingTetromino.dimension - 1
+    let startColumn = this.currentCoordinate.col
+    let endColumn = this.currentCoordinate.col + this.fallingTetromino.dimension
+
+    for (let col = startColumn; col < endColumn; col++) {
+      if (this.grid[lastRow][col] !== this.SENTINEL_MARKER) {
+        return true
+      }
+    }
+
+    return false
   }
 }
