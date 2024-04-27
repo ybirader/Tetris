@@ -12,8 +12,6 @@ function createEmptyGrid(width, height, sentinelMarker) {
 }
 
 export class Board {
-  width;
-  height;
   grid;
   currentCoordinate;
   fallingTetromino;
@@ -21,9 +19,15 @@ export class Board {
   SENTINEL_MARKER = ".";
 
   constructor(width, height) {
-    this.width = width;
-    this.height = height;
     this.grid = createEmptyGrid(width, height, this.SENTINEL_MARKER);
+  }
+
+  get width() {
+    return this.grid[0].length;
+  }
+
+  get height() {
+    return this.grid.length;
   }
 
   tick() {
@@ -110,16 +114,16 @@ export class Board {
   }
 
   hasTetrominoBelow() {
-    let lastRow = this.currentCoordinate.row + this.fallingTetromino.dimension - 1
-    let startColumn = this.currentCoordinate.col
-    let endColumn = this.currentCoordinate.col + this.fallingTetromino.dimension
+    let lastRow = this.currentCoordinate.row + this.fallingTetromino.dimension - 1;
+    let startColumn = this.currentCoordinate.col;
+    let endColumn = this.currentCoordinate.col + this.fallingTetromino.dimension;
 
     for (let col = startColumn; col < endColumn; col++) {
       if (this.grid[lastRow][col] !== this.SENTINEL_MARKER) {
-        return true
+        return true;
       }
     }
 
-    return false
+    return false;
   }
 }
