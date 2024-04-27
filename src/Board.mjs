@@ -1,5 +1,16 @@
 import { Tetromino } from "./Tetromino.mjs";
 
+function createEmptyGrid(width, height, sentinelMarker) {
+  const result = [];
+
+  for (let i = 0; i < height; i++) {
+    const row = Array(width).fill(sentinelMarker);
+    result.push(row);
+  }
+
+  return result;
+}
+
 export class Board {
   width;
   height;
@@ -12,7 +23,7 @@ export class Board {
   constructor(width, height) {
     this.width = width;
     this.height = height;
-    this.grid = this._resetGrid();
+    this.grid = createEmptyGrid(width, height, this.SENTINEL_MARKER);
   }
 
   tick() {
@@ -85,17 +96,6 @@ export class Board {
 
   toString() {
     return this.grid.map((row) => `${row.join("")}\n`).join("");
-  }
-
-  _resetGrid() {
-    const result = [];
-
-    for (let i = 0; i < this.height; i++) {
-      const row = Array(this.width).fill(this.SENTINEL_MARKER);
-      result.push(row);
-    }
-
-    return result;
   }
 
   _hasFallen() {
