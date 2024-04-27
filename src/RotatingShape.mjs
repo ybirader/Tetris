@@ -32,4 +32,8 @@ export class RotatingShape {
   toString() {
     return this._shapeData.map((row) => `${row.join("")}\n`).join("");
   }
+
+  at(row, col) {
+    return this._shapeData[row][col]
+  }
 }

@@ -1,3 +1,5 @@
+import { Tetromino } from "./Tetromino.mjs";
+
 export class Board {
   width;
   height;
@@ -30,7 +32,25 @@ export class Board {
     }
 
     this.fallingTetromino = tetromino;
-    this._initializeBlockPosition()
+    let initialRow = 0;
+    let initialCol = Math.floor(this.width / 2);
+    this.currentCoordinate = { row: initialRow, col: initialCol };
+
+    if (!(tetromino instanceof Tetromino)) {
+      this.grid[initialRow][initialCol] = tetromino;
+      return;
+    }
+
+    initialCol = Math.floor((this.width - tetromino.dimension) / 2);
+    this.currentCoordinate.col = initialCol;
+
+    for (let row = 0; row < tetromino.dimension; row++) {
+      for (let col = 0; col < tetromino.dimension; col++) {
+        if (tetromino.hasMarker(row, col)) {
+          this.grid[row + initialRow][col + initialCol] = tetromino.marker;
+        }
+      }
+    }
   }
 
   hasFalling() {
@@ -57,11 +77,5 @@ export class Board {
       this.currentCoordinate.row + 1 >= this.height ||
       this.grid[this.currentCoordinate.row + 1][this.currentCoordinate.col] != this.SENTINEL_MARKER
     );
-  }
-
-  _initializeBlockPosition() {
-    const initialCol = Math.floor(this.width / 2);
-    this.currentCoordinate = { row: 0, col: initialCol };
-    this.grid[0][initialCol] = this.fallingTetromino;
   }
 }

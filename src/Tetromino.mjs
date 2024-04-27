@@ -8,7 +8,9 @@ export class Tetromino {
     TTT
     ...
     `,
-      4
+      4,
+      3,
+      "T"
     );
   }
 
@@ -21,7 +23,9 @@ export class Tetromino {
     .....
     .....
     `,
-      2
+      2,
+      5,
+      "I"
     );
   }
 
@@ -32,11 +36,13 @@ export class Tetromino {
     .OO
     ...
     `,
-      1
+      1,
+      3,
+      "O"
     );
   }
 
-  static fromString(shapeString, numberOfOrientations) {
+  static fromString(shapeString, numberOfOrientations, dimension, marker) {
     const rotatingShape = RotatingShape.fromString(shapeString);
     const orientations = [
       rotatingShape,
@@ -45,15 +51,19 @@ export class Tetromino {
       rotatingShape.rotateRight().rotateRight().rotateRight(),
     ].slice(0, numberOfOrientations);
 
-    return new Tetromino(orientations, 0);
+    return new Tetromino(orientations, 0, dimension, marker);
   }
 
   orientations;
   currentOrientation;
+  dimension;
+  marker;
 
-  constructor(orientations, currentOrientation) {
+  constructor(orientations, currentOrientation, dimension, marker) {
     this.orientations = orientations;
     this.currentOrientation = (currentOrientation + orientations.length) % orientations.length;
+    this.dimension = dimension
+    this.marker = marker
   }
 
   rotateRight() {
@@ -66,5 +76,9 @@ export class Tetromino {
 
   toString() {
     return this.orientations[this.currentOrientation].toString();
+  }
+
+  hasMarker(row, col) {
+    return this.orientations[this.currentOrientation].at(row, col) !== "."
   }
 }
