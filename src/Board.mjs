@@ -21,9 +21,35 @@ export class Board {
       return;
     }
 
-    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER;
+    this.moveTetromino();
+  }
+
+  moveTetromino() {
+    this.removeExistingTetromino();
     this.currentCoordinate.row += 1;
-    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.fallingTetromino;
+    this.addTetromino();
+  }
+
+  removeExistingTetromino() {
+    if (!(this.fallingTetromino instanceof Tetromino)) {
+      this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER;
+      return;
+    }
+  }
+
+  addTetromino() {
+    if (!(this.fallingTetromino instanceof Tetromino)) {
+      this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.fallingTetromino;
+      return;
+    }
+
+    for (let row = 0; row < this.fallingTetromino.dimension; row++) {
+      for (let col = 0; col < this.fallingTetromino.dimension; col++) {
+        if (this.fallingTetromino.hasMarker(row, col)) {
+          this.grid[row + this.currentCoordinate.row][col + this.currentCoordinate.col] = this.fallingTetromino.marker;
+        }
+      }
+    }
   }
 
   drop(tetromino) {
@@ -44,13 +70,7 @@ export class Board {
     initialCol = Math.floor((this.width - tetromino.dimension) / 2);
     this.currentCoordinate.col = initialCol;
 
-    for (let row = 0; row < tetromino.dimension; row++) {
-      for (let col = 0; col < tetromino.dimension; col++) {
-        if (tetromino.hasMarker(row, col)) {
-          this.grid[row + initialRow][col + initialCol] = tetromino.marker;
-        }
-      }
-    }
+    this.addTetromino();
   }
 
   hasFalling() {
@@ -81,7 +101,6 @@ export class Board {
     }
   }
 }
-
 
 /*
 
