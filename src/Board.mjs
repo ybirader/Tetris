@@ -3,7 +3,7 @@ export class Board {
   height;
   grid;
   currentCoordinate;
-  currentBlock;
+  fallingTetromino;
 
   SENTINEL_MARKER = ".";
 
@@ -15,26 +15,26 @@ export class Board {
 
   tick() {
     if (this._hasFallen()) {
-      this.currentBlock = undefined;
+      this.fallingTetromino = undefined;
       return;
     }
 
     this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER;
     this.currentCoordinate.row += 1;
-    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.currentBlock;
+    this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.fallingTetromino;
   }
 
-  drop(block) {
+  drop(tetromino) {
     if (this.hasFalling()) {
       throw new Error("already falling");
     }
 
-    this.currentBlock = block;
+    this.fallingTetromino = tetromino;
     this._initializeBlockPosition()
   }
 
   hasFalling() {
-    return this.currentBlock != undefined;
+    return this.fallingTetromino != undefined;
   }
 
   toString() {
@@ -62,6 +62,6 @@ export class Board {
   _initializeBlockPosition() {
     const initialCol = Math.floor(this.width / 2);
     this.currentCoordinate = { row: 0, col: initialCol };
-    this.grid[0][initialCol] = this.currentBlock;
+    this.grid[0][initialCol] = this.fallingTetromino;
   }
 }
