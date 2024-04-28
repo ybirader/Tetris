@@ -14,7 +14,7 @@ function createEmptyGrid(width, height, sentinelMarker) {
 export class Board {
   grid;
   currentCoordinate;
-  fallingTetromino;
+  movingPiece;
 
   SENTINEL_MARKER = ".";
 
@@ -32,7 +32,7 @@ export class Board {
 
   tick() {
     if (this._hasFallen()) {
-      this.fallingTetromino = undefined;
+      this.movingPiece = undefined;
       return;
     }
 
@@ -44,7 +44,7 @@ export class Board {
       throw new Error("already falling");
     }
 
-    this.fallingTetromino = tetromino;
+    this.movingPiece = tetromino;
     let initialRow = 0;
     let initialCol = Math.floor(this.width / 2);
     this.currentCoordinate = { row: initialRow, col: initialCol };
@@ -61,7 +61,7 @@ export class Board {
   }
 
   hasFalling() {
-    return this.fallingTetromino != undefined;
+    return this.movingPiece != undefined;
   }
 
   toString() {
@@ -69,14 +69,14 @@ export class Board {
   }
 
   _hasFallen() {
-    if (!(this.fallingTetromino instanceof Tetromino)) {
+    if (!(this.movingPiece instanceof Tetromino)) {
       return (
         this.currentCoordinate.row + 1 >= this.height ||
         this.grid[this.currentCoordinate.row + 1][this.currentCoordinate.col] != this.SENTINEL_MARKER
       );
     }
 
-    return this.currentCoordinate.row + this.fallingTetromino.dimension > this.height || this._hasTetrominoBelow();
+    return this.currentCoordinate.row + this.movingPiece.dimension > this.height || this._hasTetrominoBelow();
   }
 
   _moveTetromino() {
@@ -86,37 +86,37 @@ export class Board {
   }
 
   _removeExistingTetromino() {
-    if (!(this.fallingTetromino instanceof Tetromino)) {
+    if (!(this.movingPiece instanceof Tetromino)) {
       this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.SENTINEL_MARKER;
       return;
     }
 
-    for (let row = 0; row < this.fallingTetromino.dimension; row++) {
-      for (let col = 0; col < this.fallingTetromino.dimension; col++) {
+    for (let row = 0; row < this.movingPiece.dimension; row++) {
+      for (let col = 0; col < this.movingPiece.dimension; col++) {
         this.grid[row + this.currentCoordinate.row][col + this.currentCoordinate.col] = this.SENTINEL_MARKER;
       }
     }
   }
 
   _addTetromino() {
-    if (!(this.fallingTetromino instanceof Tetromino)) {
-      this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.fallingTetromino;
+    if (!(this.movingPiece instanceof Tetromino)) {
+      this.grid[this.currentCoordinate.row][this.currentCoordinate.col] = this.movingPiece;
       return;
     }
 
-    for (let row = 0; row < this.fallingTetromino.dimension; row++) {
-      for (let col = 0; col < this.fallingTetromino.dimension; col++) {
-        if (this.fallingTetromino.hasMarker(row, col)) {
-          this.grid[row + this.currentCoordinate.row][col + this.currentCoordinate.col] = this.fallingTetromino.marker;
+    for (let row = 0; row < this.movingPiece.dimension; row++) {
+      for (let col = 0; col < this.movingPiece.dimension; col++) {
+        if (this.movingPiece.hasMarker(row, col)) {
+          this.grid[row + this.currentCoordinate.row][col + this.currentCoordinate.col] = this.movingPiece.marker;
         }
       }
     }
   }
 
   _hasTetrominoBelow() {
-    let lastRow = this.currentCoordinate.row + this.fallingTetromino.dimension - 1;
+    let lastRow = this.currentCoordinate.row + this.movingPiece.dimension - 1;
     let startColumn = this.currentCoordinate.col;
-    let endColumn = this.currentCoordinate.col + this.fallingTetromino.dimension;
+    let endColumn = this.currentCoordinate.col + this.movingPiece.dimension;
 
     for (let col = startColumn; col < endColumn; col++) {
       if (this.grid[lastRow][col] !== this.SENTINEL_MARKER) {
