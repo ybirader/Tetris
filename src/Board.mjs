@@ -11,6 +11,16 @@ function createEmptyGrid(width, height, sentinelMarker) {
   return result;
 }
 
+class MovingPiece {
+  piece;
+  position;
+
+  constructor(piece, initialRow, initialCol) {
+    this.piece = piece;
+    this.position = { row: initialRow, col: initialCol };
+  }
+}
+
 export class Board {
   grid;
   currentCoordinate;
@@ -39,22 +49,22 @@ export class Board {
     this._moveTetromino();
   }
 
-  drop(tetromino) {
+  drop(piece) {
     if (this.hasFalling()) {
       throw new Error("already falling");
     }
 
-    this.movingPiece = tetromino;
+    this.movingPiece = piece;
     let initialRow = 0;
     let initialCol = Math.floor(this.width / 2);
     this.currentCoordinate = { row: initialRow, col: initialCol };
 
-    if (!(tetromino instanceof Tetromino)) {
-      this.grid[initialRow][initialCol] = tetromino;
+    if (!(piece instanceof Tetromino)) {
+      this.grid[initialRow][initialCol] = piece;
       return;
     }
 
-    initialCol = Math.floor((this.width - tetromino.dimension) / 2);
+    initialCol = Math.floor((this.width - piece.dimension) / 2);
     this.currentCoordinate.col = initialCol;
 
     this._addTetromino();
