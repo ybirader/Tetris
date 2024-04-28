@@ -94,7 +94,7 @@ export class Board {
       return;
     }
 
-    this._moveTetromino();
+    this._movePiece();
   }
 
   drop(piece) {
@@ -105,7 +105,7 @@ export class Board {
     this.movingPiece = piece;
     this.newMovingPiece = createMovingPiece(piece, this.width);
 
-    this._addTetromino();
+    this._addPiece();
   }
 
   hasFalling() {
@@ -127,20 +127,13 @@ export class Board {
     return this.newMovingPiece.row + this.newMovingPiece.dimension > this.height || this._hasTetrominoBelow();
   }
 
-  _hasFallenX() {
-    return this.newMovingPiece.row + this.newMovingPiece.dimension >= this.height || this.hasPieceBelow();
-  }
-
-  hasPieceBelow() {
-  }
-
-  _moveTetromino() {
-    this._removeExistingTetromino();
+  _movePiece() {
+    this._removeExistingPiece();
     this.newMovingPiece.moveDown();
-    this._addTetromino();
+    this._addPiece();
   }
 
-  _removeExistingTetromino() {
+  _removeExistingPiece() {
     for (let row = 0; row < this.newMovingPiece.dimension; row++) {
       for (let col = 0; col < this.newMovingPiece.dimension; col++) {
         this.grid[row + this.newMovingPiece.row][col + this.newMovingPiece.col] = this.SENTINEL_MARKER;
@@ -148,7 +141,7 @@ export class Board {
     }
   }
 
-  _addTetromino() {
+  _addPiece() {
     for (let row = 0; row < this.newMovingPiece.dimension; row++) {
       for (let col = 0; col < this.newMovingPiece.dimension; col++) {
         if (this.newMovingPiece.hasMarker(row, col)) {
