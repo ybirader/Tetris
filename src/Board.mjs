@@ -36,6 +36,19 @@ class MovingPiece {
     return this.piece.marker;
   }
 
+  blockAt(gridRow, gridCol) {
+    if (
+      gridRow >= this.row &&
+      gridCol >= this.col &&
+      gridRow < this.row + this.dimension &&
+      gridCol < this.col + this.dimension
+    ) {
+      return this.piece.blockAt(gridRow - this.row, gridCol - this.col)
+    }
+
+    return "."
+  }
+
   moveDown() {
     this.position.row += 1;
   }
@@ -57,6 +70,10 @@ class Block {
 
   hasMarker(row, col) {
     return true;
+  }
+
+  blockAt(row, col) {
+    return this.piece
   }
 }
 
@@ -113,7 +130,27 @@ export class Board {
   }
 
   toString() {
-    return this.grid.map((row) => `${row.join("")}\n`).join("");
+    let result = "";
+
+    for (let row = 0; row < this.height; row++) {
+      for (let col = 0; col < this.width; col++) {
+        result += this.blockAt(row, col);
+      }
+      result += "\n";
+    }
+
+    return result;
+  }
+
+  blockAt(row, col) {
+    if (this.hasFalling()) {
+      const block = this.newMovingPiece.blockAt(row, col);
+      if (block !== this.SENTINEL_MARKER) {
+        return block;
+      }
+    }
+
+    return this.grid[row][col];
   }
 
   _hasFallen() {
