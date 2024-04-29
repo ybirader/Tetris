@@ -105,7 +105,7 @@ export class Board {
       return;
     }
 
-    this.moveDown();
+    this.movingPiece.moveDown()
     if (this._invalidMove()) {
       this._undoMove();
       this._stopFalling();
@@ -127,11 +127,11 @@ export class Board {
   }
 
   moveDown() {
-    this.movingPiece.moveDown()
+    this.tick()
   }
 
   hasFalling() {
-    return this.movingPiece !== undefined && this.movingPiece !== undefined;
+    return this.movingPiece !== undefined;
   }
 
   toString() {
