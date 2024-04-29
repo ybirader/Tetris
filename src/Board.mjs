@@ -105,7 +105,7 @@ export class Board {
       return;
     }
 
-    this._movePiece();
+    this.moveDown();
     if (this._invalidMove()) {
       this._undoMove();
       this._stopFalling();
@@ -118,6 +118,10 @@ export class Board {
 
   moveRight() {
     this.movingPiece.moveRight();
+  }
+
+  moveDown() {
+    this.movingPiece.moveDown()
   }
 
   hasFalling() {
@@ -135,10 +139,6 @@ export class Board {
     }
 
     return result;
-  }
-
-  _movePiece() {
-    this.movingPiece.moveDown();
   }
 
   _blockAt(row, col) {
