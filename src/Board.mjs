@@ -1,4 +1,4 @@
-import { Tetromino } from "./Tetromino.mjs";
+const SENTINEL_MARKER = "."
 
 function createEmptyGrid(width, height, sentinelMarker) {
   const result = [];
@@ -43,37 +43,31 @@ class MovingPiece {
       gridRow < this.row + this.dimension &&
       gridCol < this.col + this.dimension
     ) {
-      return this.piece.blockAt(gridRow - this.row, gridCol - this.col)
+      return this.piece.blockAt(gridRow - this.row, gridCol - this.col);
     }
 
-    return "."
+    return SENTINEL_MARKER;
   }
 
   moveDown() {
     this.position.row += 1;
   }
 
-  hasMarker(row, col) {
-    return this.piece.hasMarker(row, col);
+  moveUp() {
+    this.position.row -= 1;
   }
 }
 
 class Block {
   piece;
   dimension = 1;
-  marker;
 
   constructor(piece) {
     this.piece = piece;
-    this.marker = piece;
   }
 
-  hasMarker(row, col) {
-    return true;
-  }
-
-  blockAt(row, col) {
-    return this.piece
+  blockAt(gridRow, gridCol) {
+    return this.piece;
   }
 }
 
@@ -87,14 +81,10 @@ function createMovingPiece(piece, width) {
 
 export class Board {
   grid;
-  currentCoordinate;
   movingPiece;
-  newMovingPiece;
-
-  SENTINEL_MARKER = ".";
 
   constructor(width, height) {
-    this.grid = createEmptyGrid(width, height, this.SENTINEL_MARKER);
+    this.grid = createEmptyGrid(width, height, SENTINEL_MARKER);
   }
 
   get width() {
@@ -105,28 +95,28 @@ export class Board {
     return this.grid.length;
   }
 
-  tick() {
-    if (this._hasFallen()) {
-      this.movingPiece = undefined;
-      return;
-    }
-
-    this._movePiece();
-  }
-
   drop(piece) {
     if (this.hasFalling()) {
       throw new Error("already falling");
     }
 
-    this.movingPiece = piece;
-    this.newMovingPiece = createMovingPiece(piece, this.width);
+    this.movingPiece = createMovingPiece(piece, this.width);
+  }
 
-    this._addPiece();
+  tick() {
+    if (!this.hasFalling()) {
+      return;
+    }
+
+    this._movePiece();
+    if (this._invalidMove()) {
+      this._undoMove();
+      this._stopFalling();
+    }
   }
 
   hasFalling() {
-    return this.movingPiece !== undefined && this.newMovingPiece !== undefined;
+    return this.movingPiece !== undefined && this.movingPiece !== undefined;
   }
 
   toString() {
@@ -134,7 +124,7 @@ export class Board {
 
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        result += this.blockAt(row, col);
+        result += this._blockAt(row, col);
       }
       result += "\n";
     }
@@ -142,10 +132,14 @@ export class Board {
     return result;
   }
 
-  blockAt(row, col) {
+  _movePiece() {
+    this.movingPiece.moveDown();
+  }
+
+  _blockAt(row, col) {
     if (this.hasFalling()) {
-      const block = this.newMovingPiece.blockAt(row, col);
-      if (block !== this.SENTINEL_MARKER) {
+      const block = this.movingPiece.blockAt(row, col);
+      if (block !== SENTINEL_MARKER) {
         return block;
       }
     }
@@ -153,52 +147,37 @@ export class Board {
     return this.grid[row][col];
   }
 
-  _hasFallen() {
-    if (!(this.movingPiece instanceof Tetromino)) {
-      return (
-        this.newMovingPiece.row + 1 >= this.height ||
-        this.grid[this.newMovingPiece.row + 1][this.newMovingPiece.col] != this.SENTINEL_MARKER
-      );
-    }
-
-    return this.newMovingPiece.row + this.newMovingPiece.dimension > this.height || this._hasTetrominoBelow();
-  }
-
-  _movePiece() {
-    this._removeExistingPiece();
-    this.newMovingPiece.moveDown();
-    this._addPiece();
-  }
-
-  _removeExistingPiece() {
-    for (let row = 0; row < this.newMovingPiece.dimension; row++) {
-      for (let col = 0; col < this.newMovingPiece.dimension; col++) {
-        this.grid[row + this.newMovingPiece.row][col + this.newMovingPiece.col] = this.SENTINEL_MARKER;
-      }
-    }
-  }
-
-  _addPiece() {
-    for (let row = 0; row < this.newMovingPiece.dimension; row++) {
-      for (let col = 0; col < this.newMovingPiece.dimension; col++) {
-        if (this.newMovingPiece.hasMarker(row, col)) {
-          this.grid[row + this.newMovingPiece.row][col + this.newMovingPiece.col] = this.newMovingPiece.marker;
+  _invalidMove() {
+    for (let row = this.movingPiece.row; row < this.movingPiece.row + this.movingPiece.dimension; row++) {
+      for (let col = this.movingPiece.col; col < this.movingPiece.col + this.movingPiece.dimension; col++) {
+        if (this._outOfBounds(row, col) || this._hasCollided(row, col)) {
+          return true;
         }
-      }
-    }
-  }
-
-  _hasTetrominoBelow() {
-    let lastRow = this.newMovingPiece.row + this.newMovingPiece.dimension - 1;
-    let startColumn = this.newMovingPiece.col;
-    let endColumn = this.newMovingPiece.col + this.newMovingPiece.dimension;
-
-    for (let col = startColumn; col < endColumn; col++) {
-      if (this.grid[lastRow][col] !== this.SENTINEL_MARKER) {
-        return true;
       }
     }
 
     return false;
+  }
+
+  _outOfBounds(row, col) {
+    return this.movingPiece.blockAt(row, col) !== SENTINEL_MARKER && row >= this.height;
+  }
+
+  _hasCollided(row, col) {
+    return this.movingPiece.blockAt(row, col) !== SENTINEL_MARKER && this.grid[row][col] !== SENTINEL_MARKER;
+  }
+
+  _undoMove() {
+    this.movingPiece.moveUp();
+  }
+
+  _stopFalling() {
+    for (let row = 0; row < this.height; row++) {
+      for (let col = 0; col < this.width; col++) {
+        this.grid[row][col] = this._blockAt(row, col);
+      }
+    }
+
+    this.movingPiece = undefined;
   }
 }
