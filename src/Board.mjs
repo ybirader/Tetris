@@ -1,4 +1,6 @@
-const SENTINEL_MARKER = "."
+import { Block } from "./Block.mjs";
+
+const SENTINEL_MARKER = ".";
 
 function createEmptyGrid(width, height, sentinelMarker) {
   const result = [];
@@ -55,19 +57,6 @@ class MovingPiece {
 
   moveUp() {
     this.position.row -= 1;
-  }
-}
-
-class Block {
-  piece;
-  dimension = 1;
-
-  constructor(piece) {
-    this.piece = piece;
-  }
-
-  blockAt(gridRow, gridCol) {
-    return this.piece;
   }
 }
 

@@ -78,10 +78,6 @@ export class Tetromino {
     return this.orientations[this.currentOrientation].toString();
   }
 
-  hasMarker(row, col) {
-    return this.orientations[this.currentOrientation].at(row, col) !== "."
-  }
-
   blockAt(row, col) {
     return this.orientations[this.currentOrientation].at(row, col)
   }
