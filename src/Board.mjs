@@ -58,6 +58,10 @@ class MovingPiece {
   moveUp() {
     this.position.row -= 1;
   }
+
+  moveLeft() {
+    this.position.col -= 1;
+  }
 }
 
 function createMovingPiece(piece, width) {
@@ -102,6 +106,10 @@ export class Board {
       this._undoMove();
       this._stopFalling();
     }
+  }
+
+  moveLeft() {
+    this.movingPiece.moveLeft();
   }
 
   hasFalling() {
