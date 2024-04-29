@@ -93,7 +93,7 @@ describe("Falling tetrominos", () => {
   test("cannot be moved down beyond the board and stops falling", () => {
     board.drop(Tetromino.T_SHAPE);
 
-    for (let i = 0; i < board.width; i++) {
+    for (let i = 0; i < 2*board.height; i++) {
       board.moveDown()
     }
 
@@ -104,6 +104,37 @@ describe("Falling tetrominos", () => {
       ..........
       ....T.....
       ...TTT....`
+    );
+  });
+
+
+  test("cannot be moved right through other blocks", () => {
+    board.drop(Tetromino.T_SHAPE);
+
+    for (let i = 0; i < board.width; i++) {
+      board.moveRight()
+    }
+    for (let i = 0; i < 2*board.height; i++) {
+      board.moveDown()
+    }
+
+    board.drop(Tetromino.T_SHAPE)
+
+    for (let i = 0; i < 3; i++) {
+      board.moveDown()
+    }
+    for (let i = 0; i < board.width; i++) {
+      board.moveRight()
+    }
+
+
+    expect(board.toString()).to.equalShape(
+     `..........
+      ..........
+      ..........
+      ......T...
+      .....TTTT.
+      .......TTT`
     );
   });
 });
