@@ -137,4 +137,34 @@ describe("Falling tetrominos", () => {
       .......TTT`
     );
   });
+
+  test("cannot be moved left through other blocks", () => {
+    board.drop(Tetromino.T_SHAPE);
+
+    for (let i = 0; i < board.width; i++) {
+      board.moveLeft()
+    }
+    for (let i = 0; i < 2*board.height; i++) {
+      board.moveDown()
+    }
+
+    board.drop(Tetromino.T_SHAPE)
+
+    for (let i = 0; i < 3; i++) {
+      board.moveDown()
+    }
+    for (let i = 0; i < board.width; i++) {
+      board.moveLeft()
+    }
+
+
+    expect(board.toString()).to.equalShape(
+     `..........
+      ..........
+      ..........
+      ...T......
+      .TTTT.....
+      TTT.......`
+    );
+  });
 });
