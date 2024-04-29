@@ -114,6 +114,9 @@ export class Board {
 
   moveLeft() {
     this.movingPiece.moveLeft();
+    if (this._invalidMove()) {
+      this.moveRight()
+    }
   }
 
   moveRight() {
