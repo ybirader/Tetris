@@ -208,4 +208,21 @@ describe("Falling tetrominos", () => {
        ..........`
     );
   });
+
+  test("cannot be rotated left when there is no room", () => {
+    board.drop(Tetromino.I_SHAPE);
+
+    board.rotateRight();
+    moveToFarLeft(board);
+    board.rotateLeft();
+
+    expect(board.toString()).to.equalShape(
+      `I.........
+       I.........
+       I.........
+       I.........
+       ..........
+       ..........`
+    );
+  });
 });

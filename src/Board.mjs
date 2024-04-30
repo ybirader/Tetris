@@ -147,6 +147,9 @@ export class Board {
 
   rotateLeft() {
     this.movingPiece.rotateLeft();
+    if (this._invalidMove()) {
+      this.rotateRight();
+    }
   }
 
   hasFalling() {
