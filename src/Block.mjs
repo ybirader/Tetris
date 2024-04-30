@@ -11,6 +11,10 @@ export class Block {
   }
 
   rotateRight() {
-    return this
+    return this;
+  }
+
+  rotateLeft() {
+    return this;
   }
 }

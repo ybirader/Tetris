@@ -70,6 +70,10 @@ class MovingPiece {
   rotateRight() {
     this.piece = this.piece.rotateRight();
   }
+
+  rotateLeft() {
+    this.piece = this.piece.rotateLeft();
+  }
 }
 
 function createMovingPiece(piece, width) {
@@ -136,6 +140,10 @@ export class Board {
 
   rotateRight() {
     this.movingPiece.rotateRight();
+  }
+
+  rotateLeft() {
+    this.movingPiece.rotateLeft();
   }
 
   hasFalling() {

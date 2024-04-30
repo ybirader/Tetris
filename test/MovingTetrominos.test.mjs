@@ -151,7 +151,7 @@ describe("Falling tetrominos", () => {
     fallToBottom(board);
 
     expect(board.toString()).to.equalShape(
-     `..........
+      `..........
       ..........
       ....T.....
       ...TTT....
@@ -161,10 +161,10 @@ describe("Falling tetrominos", () => {
   });
 
   test("can be rotated right", () => {
-    board.drop(Tetromino.T_SHAPE)
-    board.moveDown()
+    board.drop(Tetromino.T_SHAPE);
+    board.moveDown();
 
-    board.rotateRight()
+    board.rotateRight();
 
     expect(board.toString()).to.equalShape(
       `..........
@@ -173,6 +173,22 @@ describe("Falling tetrominos", () => {
        ....T.....
        ..........
        ..........`
-     );
-  })
+    );
+  });
+
+  test("can be rotated left", () => {
+    board.drop(Tetromino.T_SHAPE);
+    board.moveDown();
+
+    board.rotateLeft();
+
+    expect(board.toString()).to.equalShape(
+      `..........
+       ....T.....
+       ...TT.....
+       ....T.....
+       ..........
+       ..........`
+    );
+  });
 });
