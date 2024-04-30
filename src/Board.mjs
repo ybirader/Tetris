@@ -140,6 +140,9 @@ export class Board {
 
   rotateRight() {
     this.movingPiece.rotateRight();
+    if (this._invalidMove()) {
+      this.rotateLeft();
+    }
   }
 
   rotateLeft() {
