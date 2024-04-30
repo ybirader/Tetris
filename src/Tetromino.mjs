@@ -62,16 +62,16 @@ export class Tetromino {
   constructor(orientations, currentOrientation, dimension, marker) {
     this.orientations = orientations;
     this.currentOrientation = (currentOrientation + orientations.length) % orientations.length;
-    this.dimension = dimension
-    this.marker = marker
+    this.dimension = dimension;
+    this.marker = marker;
   }
 
   rotateRight() {
-    return new Tetromino(this.orientations, this.currentOrientation + 1);
+    return new Tetromino(this.orientations, this.currentOrientation + 1, this.dimension, this.marker);
   }
 
   rotateLeft() {
-    return new Tetromino(this.orientations, this.currentOrientation - 1);
+    return new Tetromino(this.orientations, this.currentOrientation - 1, this.dimension, this.marker);
   }
 
   toString() {
@@ -79,6 +79,6 @@ export class Tetromino {
   }
 
   blockAt(row, col) {
-    return this.orientations[this.currentOrientation].at(row, col)
+    return this.orientations[this.currentOrientation].at(row, col);
   }
 }

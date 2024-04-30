@@ -9,4 +9,8 @@ export class Block {
   blockAt(gridRow, gridCol) {
     return this.piece;
   }
+
+  rotateRight() {
+    return this
+  }
 }

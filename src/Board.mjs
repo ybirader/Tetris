@@ -66,6 +66,10 @@ class MovingPiece {
   moveRight() {
     this.position.col += 1;
   }
+
+  rotateRight() {
+    this.piece = this.piece.rotateRight();
+  }
 }
 
 function createMovingPiece(piece, width) {
@@ -105,7 +109,7 @@ export class Board {
       return;
     }
 
-    this.movingPiece.moveDown()
+    this.movingPiece.moveDown();
     if (this._invalidMove()) {
       this._undoMove();
       this._stopFalling();
@@ -115,19 +119,23 @@ export class Board {
   moveLeft() {
     this.movingPiece.moveLeft();
     if (this._invalidMove()) {
-      this.moveRight()
+      this.moveRight();
     }
   }
 
   moveRight() {
     this.movingPiece.moveRight();
     if (this._invalidMove()) {
-      this.moveLeft()
+      this.moveLeft();
     }
   }
 
   moveDown() {
-    this.tick()
+    this.tick();
+  }
+
+  rotateRight() {
+    this.movingPiece.rotateRight();
   }
 
   hasFalling() {
