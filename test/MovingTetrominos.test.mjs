@@ -243,4 +243,21 @@ describe("Falling tetrominos", () => {
        ..........`
     );
   });
+
+  test("wall kicks for left rotation", () => {
+    board.drop(Tetromino.I_SHAPE);
+
+    board.rotateRight();
+    moveToFarRight(board);
+    board.rotateLeft();
+
+    expect(board.toString()).to.equalShape(
+      `..........
+       ..........
+       ......IIII
+       ..........
+       ..........
+       ..........`
+    );
+  });
 });

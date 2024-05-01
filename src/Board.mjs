@@ -168,7 +168,39 @@ export class Board {
   }
 
   rotateLeft() {
-    this._attemptWithRollback(this.movingPiece.rotateLeft.bind(this.movingPiece), this.rotateRight.bind(this));
+    let successful = this._attemptWithRollback(
+      this.movingPiece.rotateLeft.bind(this.movingPiece),
+      this.rotateRight.bind(this)
+    );
+    if (successful) {
+      return;
+    }
+
+    successful = this._attemptWithRollback(this.movingPiece.moveRight.bind(this.movingPiece), this.moveLeft.bind(this));
+    if (successful) {
+      successful = this._attemptWithRollback(
+        this.movingPiece.rotateLeft.bind(this.movingPiece),
+        this.rotateRight.bind(this)
+      );
+      if (successful) {
+        return;
+      }
+
+      this.moveLeft();
+    }
+
+    successful = this._attemptWithRollback(this.movingPiece.moveLeft.bind(this.movingPiece), this.moveRight.bind(this));
+    if (successful) {
+      successful = this._attemptWithRollback(
+        this.movingPiece.rotateLeft.bind(this.movingPiece),
+        this.rotateRight.bind(this)
+      );
+      if (successful) {
+        return;
+      }
+
+      this.moveRight();
+    }
   }
 
   hasFalling() {
