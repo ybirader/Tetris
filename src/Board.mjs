@@ -113,25 +113,18 @@ export class Board {
       return;
     }
 
-    this.movingPiece.moveDown();
-    if (this._invalidMove()) {
+    this._attemptWithRollback(this.movingPiece.moveDown.bind(this.movingPiece), () => {
       this._undoMove();
       this._stopFalling();
-    }
+    });
   }
 
   moveLeft() {
-    this.movingPiece.moveLeft();
-    if (this._invalidMove()) {
-      this.moveRight();
-    }
+    this._attemptWithRollback(this.movingPiece.moveLeft.bind(this.movingPiece), this.moveRight.bind(this));
   }
 
   moveRight() {
-    this.movingPiece.moveRight();
-    if (this._invalidMove()) {
-      this.moveLeft();
-    }
+    this._attemptWithRollback(this.movingPiece.moveRight.bind(this.movingPiece), this.moveLeft.bind(this));
   }
 
   moveDown() {
@@ -139,17 +132,43 @@ export class Board {
   }
 
   rotateRight() {
-    this.movingPiece.rotateRight();
-    if (this._invalidMove()) {
-      this.rotateLeft();
+    let succeeded = this._attemptWithRollback(
+      this.movingPiece.rotateRight.bind(this.movingPiece),
+      this.rotateLeft.bind(this)
+    );
+    if (succeeded) {
+      return;
+    }
+
+    succeeded = this._attemptWithRollback(this.movingPiece.moveRight.bind(this.movingPiece), this.moveLeft.bind(this));
+    if (succeeded) {
+      succeeded = this._attemptWithRollback(
+        this.movingPiece.rotateRight.bind(this.movingPiece),
+        this.rotateLeft.bind(this)
+      );
+      if (succeeded) {
+        return;
+      }
+
+      this.movingPiece.moveLeft();
+    }
+
+    succeeded = this._attemptWithRollback(this.movingPiece.moveLeft.bind(this.movingPiece), this.moveRight.bind(this));
+    if (succeeded) {
+      succeeded = this._attemptWithRollback(
+        this.movingPiece.rotateRight.bind(this.movingPiece),
+        this.rotateLeft.bind(this)
+      );
+      if (succeeded) {
+        return;
+      }
+
+      this.movingPiece.moveRight();
     }
   }
 
   rotateLeft() {
-    this.movingPiece.rotateLeft();
-    if (this._invalidMove()) {
-      this.rotateRight();
-    }
+    this._attemptWithRollback(this.movingPiece.rotateLeft.bind(this.movingPiece), this.rotateRight.bind(this));
   }
 
   hasFalling() {
@@ -167,6 +186,16 @@ export class Board {
     }
 
     return result;
+  }
+
+  _attemptWithRollback(actionFn, rollbackFn) {
+    actionFn();
+    if (this._invalidMove()) {
+      rollbackFn();
+      return false;
+    }
+
+    return true;
   }
 
   _blockAt(row, col) {
