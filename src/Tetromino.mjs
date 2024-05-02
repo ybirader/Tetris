@@ -1,57 +1,65 @@
-import { RotatingShape } from "./RotatingShape.mjs";
-
 export class Tetromino {
   static get T_SHAPE() {
-    return Tetromino.fromString(
-      `
-    .T.
-    TTT
-    ...
-    `,
-      4,
-      3,
-      "T"
-    );
+    const orientations = [
+      [
+        [".", ".", ".", "."],
+        ["T", "T", "T", "."],
+        [".", "T", ".", "."],
+        [".", ".", ".", "."],
+      ],
+      [
+        [".", "T", ".", "."],
+        ["T", "T", ".", "."],
+        [".", "T", ".", "."],
+        [".", ".", ".", "."],
+      ],
+      [
+        [".", ".", ".", "."],
+        [".", "T", ".", "."],
+        ["T", "T", "T", "."],
+        [".", ".", ".", "."],
+      ],
+      [
+        [".", "T", ".", "."],
+        [".", "T", "T", "."],
+        [".", "T", ".", "."],
+        [".", ".", ".", "."],
+      ],
+    ];
+
+    return new Tetromino(orientations, 0, 4, "T");
   }
 
   static get I_SHAPE() {
-    return Tetromino.fromString(
-      `
-    .....
-    .....
-    IIII.
-    .....
-    .....
-    `,
-      2,
-      5,
-      "I"
-    );
+    const orientations = [
+      [
+        [".", ".", ".", "."],
+        ["I", "I", "I", "I"],
+        [".", ".", ".", "."],
+        [".", ".", ".", "."],
+      ],
+      [
+        [".", ".", "I", "."],
+        [".", ".", "I", "."],
+        [".", ".", "I", "."],
+        [".", ".", "I", "."],
+      ],
+    ];
+
+    return new Tetromino(orientations, 0, 4, "I");
   }
 
   static get O_SHAPE() {
-    return Tetromino.fromString(
-      `
-    .OO
-    .OO
-    ...
-    `,
-      1,
-      3,
-      "O"
-    );
-  }
-
-  static fromString(shapeString, numberOfOrientations, dimension, marker) {
-    const rotatingShape = RotatingShape.fromString(shapeString);
     const orientations = [
-      rotatingShape,
-      rotatingShape.rotateRight(),
-      rotatingShape.rotateRight().rotateRight(),
-      rotatingShape.rotateRight().rotateRight().rotateRight(),
-    ].slice(0, numberOfOrientations);
+      [
+        [".", ".", ".", "."],
+        [".", "O", "O", "."],
+        [".", "O", "O", "."],
+        [".", ".", ".", "."],
+      ],
+    ];
 
-    return new Tetromino(orientations, 0, dimension, marker);
+    return new Tetromino(orientations, 0, 4, "O");
   }
 
   orientations;
@@ -75,10 +83,10 @@ export class Tetromino {
   }
 
   toString() {
-    return this.orientations[this.currentOrientation].toString();
+    return this.orientations[this.currentOrientation].map((row) => `${row.join("")}\n`).join("");
   }
 
   blockAt(row, col) {
-    return this.orientations[this.currentOrientation].at(row, col);
+    return this.orientations[this.currentOrientation][row][col];
   }
 }
