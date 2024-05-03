@@ -2,7 +2,7 @@ import { beforeEach, describe, test } from "vitest";
 import { expect } from "chai";
 import { Board } from "../src/Board.mjs";
 import { Tetromino } from "../src/Tetromino.mjs";
-import { fallToBottom } from "./utils.mjs";
+import { fallToBottom, moveToFarRight } from "./utils.mjs";
 
 describe("Filling board", () => {
   test("clears row when it becomes full", () => {
@@ -16,6 +16,26 @@ describe("Filling board", () => {
       ....
       ....
       ....`
+    );
+  });
+
+
+  test("rows above a cleared row shift downwards", () => {
+    const board = new Board(5, 5);
+    board.drop(Tetromino.I_SHAPE);
+    fallToBottom(board);
+
+    board.drop(Tetromino.I_SHAPE);
+    board.rotateRight()
+    moveToFarRight(board)
+    fallToBottom(board);
+
+    expect(board.toString()).to.equalShape(
+      `.....
+      .....
+      ....I
+      ....I
+      ....I`
     );
   });
 });

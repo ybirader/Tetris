@@ -116,30 +116,8 @@ export class Board {
     this._attemptWithRollback(this.movingPiece.moveDown.bind(this.movingPiece), () => {
       this._undoMove();
       this._stopFalling();
-      this._clearFullRows()
+      this._clearFullRows();
     });
-  }
-
-  _clearFullRows() {
-    for (let row = 0; row < this.height; row++) {
-      let isRowFull = true
-      for (let col = 0; col < this.width; col++) {
-        if (this.grid[row][col] === SENTINEL_MARKER) {
-          isRowFull = false
-          break
-        }
-      }
-
-      if (isRowFull) {
-        this._clearRow(row)
-      }
-    }
-  }
-
-  _clearRow(row) {
-    for (let col = 0; col < this.width; col++) {
-      this.grid[row][col] = SENTINEL_MARKER
-    }
   }
 
   moveLeft() {
@@ -296,5 +274,38 @@ export class Board {
     }
 
     this.movingPiece = undefined;
+  }
+
+  _clearFullRows() {
+    for (let row = 0; row < this.height; row++) {
+      let isRowFull = true;
+      for (let col = 0; col < this.width; col++) {
+        if (this.grid[row][col] === SENTINEL_MARKER) {
+          isRowFull = false;
+          break;
+        }
+      }
+
+      if (isRowFull) {
+        this._clearRow(row);
+      }
+    }
+  }
+
+  _clearRow(row) {
+    for (let col = 0; col < this.width; col++) {
+      this.grid[row][col] = SENTINEL_MARKER;
+    }
+
+    this._shiftRowsAboveDown(row);
+  }
+
+  _shiftRowsAboveDown(initialRow) {
+    for (let col = 0; col < this.width; col++) {
+      for (let row = initialRow; row > 0; row--) {
+        this.grid[row][col] = this.grid[row - 1][col];
+        this.grid[row - 1][col] = SENTINEL_MARKER;
+      }
+    }
   }
 }
