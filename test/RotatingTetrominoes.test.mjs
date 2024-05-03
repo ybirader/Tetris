@@ -18,8 +18,6 @@ function distinctOrientations(shape) {
 describe("The T shape", () => {
   const shape = Tetromino.T_SHAPE;
 
-  console.log(shape.toString());
-
   test("initial orientation", () => {
     expect(shape.toString()).to.equalShape(
       `....

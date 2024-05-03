@@ -116,7 +116,30 @@ export class Board {
     this._attemptWithRollback(this.movingPiece.moveDown.bind(this.movingPiece), () => {
       this._undoMove();
       this._stopFalling();
+      this._clearFullRows()
     });
+  }
+
+  _clearFullRows() {
+    for (let row = 0; row < this.height; row++) {
+      let isRowFull = true
+      for (let col = 0; col < this.width; col++) {
+        if (this.grid[row][col] === SENTINEL_MARKER) {
+          isRowFull = false
+          break
+        }
+      }
+
+      if (isRowFull) {
+        this._clearRow(row)
+      }
+    }
+  }
+
+  _clearRow(row) {
+    for (let col = 0; col < this.width; col++) {
+      this.grid[row][col] = SENTINEL_MARKER
+    }
   }
 
   moveLeft() {
