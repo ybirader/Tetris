@@ -19,7 +19,7 @@ describe("Filling board", () => {
     );
   });
 
-  test("rows above a cleared row shift downwards", () => {
+  test("rows above shift downwards by number of rows cleared", () => {
     const board = new Board(5, 5);
     board.drop(Tetromino.I_SHAPE);
     fallToBottom(board);
@@ -49,6 +49,23 @@ describe("Filling board", () => {
       ....
       IIII
       ....`
+    );
+  });
+
+  test("rows below cleared row stay the same", () => {
+    const board = new Board(4, 5);
+    board.drop(Tetromino.T_SHAPE);
+    fallToBottom(board);
+
+    board.drop(Tetromino.I_SHAPE);
+    fallToBottom(board);
+
+    expect(board.toString()).to.equalShape(
+      `....
+      ....
+      ....
+      TTT.
+      .T..`
     );
   });
 });
