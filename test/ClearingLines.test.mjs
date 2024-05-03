@@ -19,15 +19,14 @@ describe("Filling board", () => {
     );
   });
 
-
   test("rows above a cleared row shift downwards", () => {
     const board = new Board(5, 5);
     board.drop(Tetromino.I_SHAPE);
     fallToBottom(board);
 
     board.drop(Tetromino.I_SHAPE);
-    board.rotateRight()
-    moveToFarRight(board)
+    board.rotateRight();
+    moveToFarRight(board);
     fallToBottom(board);
 
     expect(board.toString()).to.equalShape(
@@ -36,6 +35,20 @@ describe("Filling board", () => {
       ....I
       ....I
       ....I`
+    );
+  });
+
+  test("does not clear full row that is still falling", () => {
+    const board = new Board(4, 4);
+    board.drop(Tetromino.I_SHAPE);
+    board.tick();
+
+    expect(board.hasFalling()).to.be.true;
+    expect(board.toString()).to.equalShape(
+      `....
+      ....
+      IIII
+      ....`
     );
   });
 });
