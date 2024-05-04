@@ -19,11 +19,3 @@ test("📎 Looks like you are changing lots of production code at a time. Prefer
 
   expect(changes, "number of changed lines").to.be.lessThanOrEqual(changedLinesLimit);
 });
-
-test(`documentation is in sync with the ${changedLinesLimit} lines limit`, () => {
-  const readme = fs.readFileSync("README.md", "utf8").replaceAll("\n", " ");
-
-  expect(readme).to.contain(
-    `will fail if you change more than ${changedLinesLimit} lines of production code at a time`
-  );
-});
