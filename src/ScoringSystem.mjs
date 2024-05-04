@@ -2,9 +2,11 @@ import { RowClearedEvent } from "./const.mjs";
 
 export class ScoringSystem {
   score;
+  level;
 
   constructor(eventBus) {
     this.score = 0;
+    this.level = 1;
     this.eventBus = eventBus;
 
     this.eventBus.on(RowClearedEvent, this._handleRowCleared.bind(this));

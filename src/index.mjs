@@ -2,8 +2,7 @@ import { Board } from "./Board.mjs";
 import { ScoringSystem } from "./ScoringSystem.mjs";
 import { ShuffleBag } from "./ShuffleBag.mjs";
 import { Tetromino } from "./Tetromino.mjs";
-
-// TODO: change this code to match the API you have created, if you want to run the game for some manual testing
+import { eventBus } from "./EventBus.mjs";
 
 function initGame() {
   const canvas = document.getElementById("game");
@@ -14,11 +13,8 @@ function initGame() {
     tickDuration: 1000,
     nextTick: 0,
   };
-  game.scoring = new ScoringSystem();
-  game.board = new Board(game.columns, game.rows);
-  game.board.onClearLine = (lineCount) => {
-    game.scoring.linesCleared(lineCount);
-  };
+  game.scoring = new ScoringSystem(eventBus);
+  game.board = new Board(game.columns, game.rows, eventBus);
   game.tetrominoes = new ShuffleBag([
     Tetromino.I_SHAPE,
     Tetromino.T_SHAPE,
