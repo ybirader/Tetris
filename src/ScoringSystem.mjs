@@ -7,7 +7,12 @@ export class ScoringSystem {
     this.score = 0;
     this.eventBus = eventBus;
 
-    this.eventBus.on(RowClearedEvent, () => {
+    this.eventBus.on(RowClearedEvent, (rowsCleared) => {
+      if (rowsCleared > 1) {
+        this.score += 100;
+        return;
+      }
+
       this.score += 40;
     });
   }

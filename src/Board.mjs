@@ -280,6 +280,8 @@ export class Board {
   }
 
   _clearFullRows() {
+    let clearedRows = 0;
+
     for (let row = 0; row < this.height; row++) {
       let isRowFull = true;
       for (let col = 0; col < this.width; col++) {
@@ -291,8 +293,12 @@ export class Board {
 
       if (isRowFull) {
         this._clearRow(row);
-        this.eventBus?.emit(RowClearedEvent);
+        clearedRows += 1
       }
+    }
+
+    if (clearedRows !== 0) {
+      this.eventBus?.emit(RowClearedEvent, clearedRows);
     }
   }
 
