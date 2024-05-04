@@ -14,7 +14,7 @@ function createStackOf(board, piece, height) {
   }
 }
 
-describe("Player", () => {
+describe("Player on first level", () => {
   test("scores 40 points for clearing one line", () => {
     const eventBus = new EventEmitter();
     const board = new Board(1, 2, eventBus);
@@ -70,4 +70,6 @@ describe("Player", () => {
 
     expect(scoringSystem.currentScore()).to.equal(1200);
   });
+
+
 });
