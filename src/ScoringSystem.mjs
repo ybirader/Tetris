@@ -8,7 +8,9 @@ export class ScoringSystem {
     this.eventBus = eventBus;
 
     this.eventBus.on(RowClearedEvent, (rowsCleared) => {
-      if (rowsCleared === 3) {
+      if (rowsCleared === 4) {
+        this.score += 1200;
+      } else if (rowsCleared === 3) {
         this.score += 300;
       } else if (rowsCleared === 2) {
         this.score += 100;

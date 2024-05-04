@@ -63,4 +63,33 @@ describe("Player", () => {
 
     expect(scoringSystem.currentScore()).to.equal(300);
   });
+
+  test("scores 300 points for clearing four lines", () => {
+    const eventBus = new EventEmitter();
+    const board = new Board(5, 10, eventBus);
+    const scoringSystem = new ScoringSystem(eventBus);
+
+    board.drop(Tetromino.I_SHAPE);
+    moveToFarRight(board);
+    fallToBottom(board);
+
+    board.drop(Tetromino.I_SHAPE);
+    moveToFarRight(board);
+    fallToBottom(board);
+
+    board.drop(Tetromino.I_SHAPE);
+    moveToFarRight(board);
+    fallToBottom(board);
+
+    board.drop(Tetromino.I_SHAPE);
+    moveToFarRight(board);
+    fallToBottom(board);
+
+    board.drop(Tetromino.I_SHAPE);
+    board.rotateLeft();
+    moveToFarLeft(board);
+    fallToBottom(board);
+
+    expect(scoringSystem.currentScore()).to.equal(1200);
+  });
 });
