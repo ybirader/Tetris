@@ -293,7 +293,7 @@ export class Board {
 
       if (isRowFull) {
         this._clearRow(row);
-        clearedRows += 1
+        clearedRows += 1;
       }
     }
 
