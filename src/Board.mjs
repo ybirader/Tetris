@@ -1,4 +1,5 @@
 import { Block } from "./Block.mjs";
+import { RowClearedEvent } from "./const.mjs";
 
 const SENTINEL_MARKER = ".";
 
@@ -87,9 +88,11 @@ function createMovingPiece(piece, width) {
 export class Board {
   grid;
   movingPiece;
+  eventBus;
 
-  constructor(width, height) {
+  constructor(width, height, eventBus) {
     this.grid = createEmptyGrid(width, height, SENTINEL_MARKER);
+    this.eventBus = eventBus;
   }
 
   get width() {
@@ -288,6 +291,7 @@ export class Board {
 
       if (isRowFull) {
         this._clearRow(row);
+        this.eventBus?.emit(RowClearedEvent);
       }
     }
   }
